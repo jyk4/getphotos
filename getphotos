@@ -1,0 +1,31 @@
+#!/bin/sh
+# get pictures and videos from nikon D3100
+
+# go to images directory. year/month/date
+cd /workha/digikuvat/
+YEARDIRECTORY=20"`date +%y`"
+if [ ! -d "$YEARDIRECTORY" ]; then
+mkdir 20"`date +%y`"
+fi
+cd 20"`date +%y`"
+mkdir "`date +%m%d`"
+cd "`date +%m%d`"
+
+gphotofs /mnt/nikon/
+echo Moving pictures from camera, please wait..
+mv /mnt/nikon/*/DCIM/*/* .
+fusermount -u /mnt/nikon
+echo Camera unmounted
+
+# you can use this to encode videos
+#nice -n 19 ls -1 *.MOV|cut -d '.' -f1 |xargs -i ffmpeg -i '{}'.MOV -acodec libfaac -ab 128k -ac 2 -vcodec libx264 -vpre medium -crf 23 -threads 0 '{}'.mp4 
+#nice -n 19 ls -1 *.MOV|cut -d '.' -f1 |xargs -i avconv -i '{}'.MOV -acodec libvo_aacenc -ab 128k -ac 2 -vcodec libx264 -preset medium -crf 20 -threads 0 '{}'.mp4
+
+# autorotate JPEGs
+nice -n 19 jhead -autorot *.JPG
+
+# show the new files and directories, including sambamount
+ls /workha/digikuvat/20"`date +%y`"/"`date +%m%d`"
+echo /workha/digikuvat/20"`date +%y`"/"`date +%m%d`"
+chmod a+rw /workha/digikuvat/20"`date +%y`"/"`date +%m%d`"
+echo "Z:\digikuvat\20"`date +%y`\\`date +%m%d`
