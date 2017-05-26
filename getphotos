@@ -1,5 +1,5 @@
 #!/bin/sh
-# get pictures and videos from nikon D3100
+# get pictures and videos from nikon D3200
 
 # go to images directory. year/month/date
 cd /workha/digikuvat/
